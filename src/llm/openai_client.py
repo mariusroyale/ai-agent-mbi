@@ -1,7 +1,10 @@
 import openai
+
+from typing import List, Dict
+from base_client import BaseLLMClient
 from config import config
 
-class OpenAIClient:
+class OpenAIClient(BaseLLMClient):
     def __init__(self, api_key=None, model="gpt-4o"):
         self.api_key = api_key or config.openai_api_key
         if not self.api_key:
@@ -9,10 +12,7 @@ class OpenAIClient:
         openai.api_key = self.api_key
         self.model = model
 
-    def chat(self, messages, temperature=0.7, max_tokens=150):
-        """
-        Expects `messages` in OpenAI chat format: list of dicts with roles & content
-        """
+    def chat(self, messages: List[Dict], temperature=0.7, max_tokens=150) -> str:
         try:
             response = openai.ChatCompletion.create(
                 model=self.model,
