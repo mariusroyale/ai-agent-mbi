@@ -34,7 +34,7 @@ An intelligent AI-powered agent designed to classify and process Jira tickets us
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ai-agent-mbi.git
+git clone https://github.com/mariusroyale/ai-agent-mbi.git
 cd ai-agent-mbi
 ```
 
@@ -212,7 +212,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Marius Iordache**
 - Email: marius.technical.leader@gmail.com
-- GitHub: [@yourusername](https://github.com/yourusername)
+- GitHub: [@mariusroyale](https://github.com/mariusroyale)
 
 ## 🙏 Acknowledgments
 
@@ -225,7 +225,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you have any questions or need help setting up the project, please:
 
-1. Check the existing [Issues](https://github.com/yourusername/ai-agent-mbi/issues)
+1. Check the existing [Issues](https://github.com/mariusroyale/ai-agent-mbi/issues)
 2. Create a new issue if your question isn't already addressed
 3. Reach out via email for urgent matters
 
