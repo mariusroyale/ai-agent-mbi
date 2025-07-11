@@ -1,0 +1,73 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Byte-compiled and cache files
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.eggs/
+*.ipynb_checkpoints/
+
+# Virtual environment (if not using Poetry-managed venv)
+.env/
+.venv/
+venv/
+env/
+
+# === Poetry ===
+poetry.lock  # optional, include if you want reproducibility
+dist/
+build/
+
+# === Environment & Secrets ===
+.env
+!.env.example  # keep the template
+
+# === Jupyter Notebooks ===
+.ipynb_checkpoints/
+*.ipynb~
+
+# === OS & Editor ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# === Logs & Temp files ===
+*.log
+logs/
+tmp/
+temp/
+
+# === FAISS files ===
+*.index
+*.faiss
+
+# === Coverage / Testing ===
+.coverage
+.cache/
+pytest_cache/
+htmlcov/
+nosetests.xml
+coverage.xml
+test-results/
+
+# === MyPy, Pyright, etc. ===
+.mypy_cache/
+.pytype/
+.pyre/
+
+# === Docker (if used) ===
+*.pid
+docker-compose.override.yml
+
+.ropeproject/

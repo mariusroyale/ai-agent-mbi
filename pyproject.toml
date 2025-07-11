@@ -17,6 +17,8 @@ dependencies = [
     "python-dotenv (>=1.1.1,<2.0.0)",
     "sentence-transformers (>=5.0.0,<6.0.0)",
     "huggingface (>=0.0.1,<0.0.2)",
+    "jira (>=3.8.0,<4.0.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
 ]
 
 [build-system]
