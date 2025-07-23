@@ -94,10 +94,10 @@ ENV=development
 
 ```bash
 # Using Poetry
-poetry run python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+PYTHONPATH=src poetry run python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
 
 # Or directly with Python
-python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+PYTHONPATH=src python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
 ```
 👉 http://0.0.0.0:8000/
 
