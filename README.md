@@ -1,33 +1,29 @@
-# AI Agent MBI - Jira Ticket Classification System
+# AI Agent MBI - FastAPI-based AI Agent System
 
-An intelligent AI-powered agent designed to classify and process Jira tickets using advanced machine learning techniques. MBI (codename) leverages multiple LLM providers and vector search capabilities to provide accurate ticket classification and insights.
+An intelligent AI-powered agent system built with FastAPI, designed to integrate with multiple LLM providers for various AI tasks. The project currently features Agent 007, a conversational agent with message management capabilities.
 
 ## 🚀 Features
 
-- **Multi-LLM Support**: Integrates with OpenAI, GPT4All, and HuggingFace models
-- **Vector Search**: Powered by FAISS for efficient similarity search
-- **Jira Integration**: Direct integration with Jira API for ticket management
-- **Flexible Configuration**: Environment-based configuration management
-- **Extensible Architecture**: Modular design supporting multiple LLM clients
-- **REST API**: Built-in API server for easy integration
+- **FastAPI Backend**: Modern, fast web framework with automatic API documentation
+- **Agent 007**: Conversational AI agent with message history management
+- **Multi-LLM Support**: Extensible architecture supporting GPT4All and other LLM providers
+- **Message Management**: Add, retrieve, and clear conversation messages via REST API
+- **Environment Configuration**: Flexible configuration management with Pydantic settings
+- **Modular Architecture**: Clean separation of concerns with agent, LLM, and service layers
 
 ## 🛠️ Tech Stack
 
 - **Python 3.9+**: Core programming language
-- **OpenAI API**: Primary LLM provider
-- **LlamaIndex**: Document indexing and retrieval
-- **FAISS**: Vector similarity search
-- **Jira API**: Ticket management integration
+- **FastAPI**: Modern web framework for building APIs
 - **Pydantic**: Data validation and settings management
-- **Uvicorn**: ASGI server for API endpoints
-- **Sentence Transformers**: Text embeddings
+- **GPT4All**: Local LLM integration (planned)
+- **Uvicorn**: ASGI server for running the application
+- **Poetry**: Dependency management and packaging
 
 ## 📋 Requirements
 
 - Python 3.9 or higher
 - Poetry (for dependency management)
-- Active Jira instance with API access
-- OpenAI API key (optional: HuggingFace API key)
 
 ## 🔧 Installation
 
@@ -46,47 +42,36 @@ Using Poetry (recommended):
 poetry install
 ```
 
-Or using pip:
-
-```bash
-pip install -r requirements.txt
-```
-
 ### 3. Environment Configuration
 
-Create a `.env` file in the project root with the following variables:
+The project includes a `.env` file with default configuration. You can modify these settings as needed:
 
 ```env
-# OpenAI Configuration
-OPENAI_API_KEY=your_openai_api_key_here
-OPENAI_API_BASE=https://api.openai.com/v1
+PYTHONPATH=src
 
-# Jira Configuration
-JIRA_SERVER=https://your-company.atlassian.net
-JIRA_EMAIL=your-email@company.com
-JIRA_API_TOKEN=your_jira_api_token
+# ==== OpenAI ====
+OPENAI_API_KEY=
+OPENAI_API_BASE=
 
-# Optional: HuggingFace
-HUGGINGFACE_API_KEY=your_huggingface_api_key
+# ==== LlamaIndex ====
+LLAMA_INDEX_API_KEY=
 
-# Optional: LlamaIndex
-LLAMA_INDEX_API_KEY=your_llama_index_api_key
+# ==== HuggingFace ====
+HUGGINGFACE_API_KEY=
 
-# API Server Configuration
+# ==== Jira ====
+JIRA_SERVER=
+JIRA_EMAIL=
+JIRA_API_TOKEN=
+
+# ==== FastAPI ====
 API_HOST=0.0.0.0
 API_PORT=8000
 
-# Application Settings
+# ==== Optional ====
 LOG_LEVEL=INFO
 ENV=development
 ```
-
-### 4. Set Up Jira API Token
-
-1. Go to your Atlassian Account Settings
-2. Navigate to Security → API tokens
-3. Create a new API token
-4. Copy the token to your `.env` file
 
 ## 🚀 Usage
 
@@ -94,30 +79,39 @@ ENV=development
 
 ```bash
 # Using Poetry
-PYTHONPATH=src poetry run python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
-# Or directly with Python
-PYTHONPATH=src python -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+# Or with environment variables
+PYTHONPATH=src poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-👉 http://0.0.0.0:8000/
 
-### Basic Usage Example
+The application will be available at:
+- **API**: http://localhost:8000
+- **Interactive API Docs**: http://localhost:8000/docs
+- **Alternative API Docs**: http://localhost:8000/redoc
 
-```python
-from src.config import config
-from src.llm.client_factory import LLMClientFactory
-from src.services.search_vector import VectorSearchService
+### API Usage Examples
 
-# Initialize LLM client
-llm_client = LLMClientFactory.create_client("openai")
+**Get welcome message:**
+```bash
+curl http://localhost:8000/
+```
 
-# Classify a ticket
-ticket_description = "User cannot login to the application"
-classification = llm_client.chat([
-    {"role": "user", "content": f"Classify this ticket: {ticket_description}"}
-])
+**Add a message:**
+```bash
+curl -X POST "http://localhost:8000/messages" \
+  -H "Content-Type: application/json" \
+  -d '{"role": "user", "content": "Hello, Agent 007!"}'
+```
 
-print(f"Classification: {classification}")
+**Get all messages:**
+```bash
+curl http://localhost:8000/messages
+```
+
+**Clear all messages:**
+```bash
+curl -X DELETE http://localhost:8000/messages
 ```
 
 ## 📁 Project Structure
@@ -126,83 +120,110 @@ print(f"Classification: {classification}")
 ai-agent-mbi/
 ├── src/
 │   ├── agent/
-│   │   └── agent_007.py          # Main agent implementation
+│   │   └── agent_007.py          # Agent 007 implementation
 │   ├── llm/
 │   │   ├── base_client.py        # Abstract base class for LLM clients
-│   │   ├── client_factory.py     # Factory pattern for client creation
-│   │   ├── openai_client.py      # OpenAI API client
-│   │   └── gpt4all_client.py     # GPT4All local client
+│   │   └── gpt4all_client.py     # GPT4All client implementation
 │   ├── services/
-│   │   └── search_vector.py      # Vector search service
-│   ├── tests/                    # Test files
-│   └── config.py                 # Configuration management
+│   │   └── search_vector.py      # Vector search service (placeholder)
+│   ├── tests/                    # Test directory (empty)
+│   ├── main.py                   # FastAPI application entry point
+│   └── settings.py               # Application settings and configuration
+├── bin/                          # Binary files directory
 ├── data_mock/                    # Mock data for testing
 ├── .env                          # Environment variables
-├── pyproject.toml               # Poetry configuration
+├── pyproject.toml               # Poetry configuration and dependencies
+├── poetry.lock                  # Poetry lock file
 └── README.md                    # This file
 ```
 
 ## 🔌 API Endpoints
 
-The application exposes REST API endpoints for ticket classification:
+### Core Endpoints
 
-### POST `/classify`
-Classify a Jira ticket based on its content.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Welcome message and settings display |
+| `POST` | `/messages` | Add a new message to Agent 007 |
+| `GET` | `/messages` | Retrieve all messages from Agent 007 |
+| `DELETE` | `/messages` | Clear all messages from Agent 007 |
 
-**Request Body:**
-```json
-{
-    "ticket_id": "PROJ-123",
-    "summary": "User login issue",
-    "description": "User cannot access the application after password reset"
-}
-```
+### API Documentation
 
-**Response:**
-```json
-{
-    "ticket_id": "PROJ-123",
-    "classification": "Authentication Issue",
-    "confidence": 0.95,
-    "suggested_assignee": "security-team",
-    "priority": "high"
-}
-```
+The FastAPI application automatically generates interactive API documentation:
+- **Swagger UI**: Available at `/docs`
+- **ReDoc**: Available at `/redoc`
+
+## 🤖 Agent 007
+
+Agent 007 is the main conversational agent in the system with the following capabilities:
+
+- **Message Storage**: Maintains conversation history
+- **Role-based Messages**: Supports different message roles (user, assistant, system)
+- **Session Management**: Can reset conversation history
+- **LLM Integration**: Designed to work with various LLM providers
 
 ## 🧪 Testing
 
-Run the test suite:
+The project includes a test structure ready for implementation:
 
 ```bash
-# Using Poetry
+# Run tests (when implemented)
 poetry run pytest src/tests/
-
-# Or directly
-python -m pytest src/tests/
 ```
 
-## 📊 Configuration Options
+## ⚙️ Configuration
 
-The application supports various configuration options through environment variables:
+The application uses Pydantic Settings for configuration management. Current settings include:
 
-| Variable         | Default       | Description             |
-|------------------|---------------|-------------------------|
-| `OPENAI_API_KEY` | Required      | OpenAI API key          |
-| `JIRA_SERVER`    | Required      | Jira server URL         |
-| `JIRA_EMAIL`     | Required      | Jira user email         |
-| `JIRA_API_TOKEN` | Required      | Jira API token          |
-| `API_HOST`       | `0.0.0.0`     | API server host         |
-| `API_PORT`       | `8000`        | API server port         |
-| `LOG_LEVEL`      | `INFO`        | Logging level           |
-| `ENV`            | `development` | Environment mode        |
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `API_HOST` | `0.0.0.0` | API server host |
+| `API_PORT` | `8000` | API server port |
+| `LOG_LEVEL` | `INFO` | Logging level |
+| `ENV` | `development` | Environment mode |
+
+Additional settings for OpenAI, LlamaIndex, HuggingFace, and Jira are available but currently commented out in the settings file.
+
+## 🔄 Development Status
+
+**Current Implementation:**
+- ✅ FastAPI application setup
+- ✅ Agent 007 with message management
+- ✅ REST API endpoints for message operations
+- ✅ Basic LLM client architecture
+- ✅ Configuration management with Pydantic
+
+**Planned Features:**
+- 🔄 GPT4All integration (partially implemented)
+- 📋 OpenAI client implementation
+- 📋 Vector search functionality
+- 📋 Jira integration
+- 📋 Comprehensive test suite
+- 📋 Advanced agent capabilities
+
+## 🛠️ Dependencies
+
+Key dependencies from `pyproject.toml`:
+
+- **FastAPI** (0.116.x): Web framework
+- **Pydantic** (2.11.x): Data validation
+- **Uvicorn** (0.35.x): ASGI server
+- **GPT4All** (2.8.x): Local LLM support
+- **OpenAI** (1.95.x): OpenAI API client
+- **LlamaIndex** (0.12.x): Document indexing
+- **FAISS** (1.11.x): Vector similarity search
+- **Pytest** (8.4.x): Testing framework
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes
+4. Add tests for new functionality
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## 📝 License
 
@@ -216,19 +237,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- OpenAI for providing the GPT models
-- Meta for LlamaIndex framework
-- Facebook AI Research for FAISS
-- The open-source community for the amazing tools and libraries
+- FastAPI team for the excellent web framework
+- Pydantic team for robust data validation
+- GPT4All project for local LLM capabilities
+- The open-source community for amazing tools and libraries
 
 ## 📞 Support
 
-If you have any questions or need help setting up the project, please:
+If you have any questions or need help:
 
-1. Check the existing [Issues](https://github.com/mariusroyale/ai-agent-mbi/issues)
-2. Create a new issue if your question isn't already addressed
-3. Reach out via email for urgent matters
+1. Check the [FastAPI documentation](https://fastapi.tiangolo.com/)
+2. Review the interactive API docs at `/docs` when running the application
+3. Create an issue on GitHub for bugs or feature requests
+4. Contact the author for urgent matters
 
 ---
 
-**Note**: This project is under active development. Features and API endpoints may change. Please check the latest documentation before deploying to production.
+**Note**: This project is under active development. The Agent 007 system is currently in a basic implementation phase with plans for enhanced LLM integration and advanced features.
