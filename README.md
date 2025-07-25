@@ -1,4 +1,4 @@
-# AI Agent MBI - FastAPI-based AI Agent System
+# AI Agent MBI - FastAPI-based AI Agent System (Draft)
 
 An intelligent AI-powered agent system built with FastAPI, designed to integrate with multiple LLM providers for various AI tasks. The project currently features Agent 007, a conversational agent with message management capabilities.
 
